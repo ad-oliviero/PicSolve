@@ -42,7 +42,13 @@ struct CameraView<T: Camera & Observable>: View {
                     }
                     HStack {
                         Spacer()
-                        CaptureButton(camera: camera)
+                        CaptureButton(camera: camera) { imageData in
+                            if let data = imageData,
+                               let image = UIImage(data: data)
+                            {
+                                photoSelector.image = image
+                            }
+                        }
                         Spacer()
                     }
                     .foregroundColor(.white)

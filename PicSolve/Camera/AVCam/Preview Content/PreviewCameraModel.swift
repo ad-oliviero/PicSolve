@@ -62,7 +62,7 @@ class PreviewCameraModel: Camera {
         logger.debug("Device switching isn't implemented in PreviewCamera.")
     }
     
-    func capturePhoto() async {
+    func capturePhoto() async -> Data? {
         // Simulate a quick capture for UI feedback.
         captureActivity = .photoCapture(willCapture: true)
         shouldFlashScreen = true
@@ -70,6 +70,7 @@ class PreviewCameraModel: Camera {
         captureActivity = .idle
         shouldFlashScreen = false
         logger.debug("Photo capture isn't implemented in PreviewCamera.")
+        return nil
     }
     
     func focusAndExpose(at point: CGPoint) async {

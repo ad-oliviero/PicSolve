@@ -38,7 +38,7 @@ protocol Camera: AnyObject, SendableMetatype {
     var qualityPrioritization: QualityPrioritization { get set }
 
     /// Captures a photo and writes it to the user's photo library.
-    func capturePhoto() async
+    func capturePhoto() async -> Data?
 
     /// A Boolean value that indicates whether to show visual feedback when capture begins.
     var shouldFlashScreen: Bool { get }

@@ -86,14 +86,16 @@ final class CameraModel: Camera {
     // MARK: - Photo capture
 
     /// Captures a photo and writes it to the user's Photos library.
-    func capturePhoto() async {
+    func capturePhoto() async -> Data? {
         do {
             let photoFeatures = PhotoFeatures(qualityPrioritization: .balanced)
             let photo = try await captureService.capturePhoto(with: photoFeatures)
             lastCapturedPhotoData = photo.data
+            return lastCapturedPhotoData
         } catch {
             self.error = error
         }
+        return nil
     }
 
     /// A value that indicates how to balance the photo capture quality versus speed.

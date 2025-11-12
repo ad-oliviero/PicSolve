@@ -1,16 +1,16 @@
-/*
- See the LICENSE.txt file for this sample’s licensing information.
-
- Abstract:
- A view that displays an appropriate capture button for the selected capture mode.
- */
+//
+//  CaptureButton.swift
+//  PicSolve
+//
+//  Created by Adriano Oliviero on 12/11/25.
+//
 
 import SwiftUI
 
-/// A view that displays an appropriate capture button for the selected mode.
 @MainActor
 struct CaptureButton<CameraModel: Camera>: View {
     @State var camera: CameraModel
+    var onCapture: (Data?) -> Void = { _ in }
 
     var body: some View {
         ZStack {
@@ -19,7 +19,9 @@ struct CaptureButton<CameraModel: Camera>: View {
                 .fill(.white)
             Button {
                 Task {
-                    await camera.capturePhoto()
+                    if let imageData = await camera.capturePhoto() {
+                        onCapture(imageData)
+                    }
                 }
             } label: {
                 Circle()
@@ -41,7 +43,7 @@ struct CaptureButton<CameraModel: Camera>: View {
     }
 }
 
-#Preview("Photo") {
+#Preview {
     CaptureButton(camera: PreviewCameraModel(captureMode: .photo))
         .background(.black)
 }
