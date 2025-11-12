@@ -17,17 +17,23 @@ class PhotoSelectorViewModel: ObservableObject {
     #endif
     @Published var selectedPhotos = [PhotosPickerItem]()
     @Published var croppedImages: [UIImage] = []
+    @Published var imageData: Data?
 
     @MainActor
     func convertDataToImage() {
         if !selectedPhotos.isEmpty {
             Task {
-                if let imageData = try? await selectedPhotos[0].loadTransferable(type: Data.self) {
-                    if let currentimage = UIImage(data: imageData) {
+                if let data = try? await selectedPhotos[0].loadTransferable(type: Data.self) {
+                    self.imageData = data
+                    if let currentimage = UIImage(data: data) {
                         image = currentimage
                         selectedPhotos.removeAll()
                     }
                 }
+            }
+        } else if imageData != nil {
+            if let currentimage = UIImage(data: imageData!) {
+                image = currentimage
             }
         }
     }

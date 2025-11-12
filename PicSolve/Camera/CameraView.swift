@@ -20,7 +20,8 @@ struct CameraView<T: Camera & Observable>: View {
             PreviewContainer(camera: camera) {
                 CameraPreview(source: camera.previewSource)
             }
-            VStack(spacing: 0) {
+
+            VStack {
                 Spacer()
                 ZStack {
                     HStack {
@@ -33,20 +34,20 @@ struct CameraView<T: Camera & Observable>: View {
                                 .frame(width: 68, height: 68)
                                 .background(Color.white.opacity(0.2))
                                 .clipShape(Circle())
-                        }.photosPicker(isPresented: $showPhotoPicker,
-                                       selection: $photoSelector.selectedPhotos,
-                                       maxSelectionCount: 1,
-                                       selectionBehavior: .ordered,
-                                       matching: .images)
+                        }
+                        .photosPicker(isPresented: $showPhotoPicker,
+                                      selection: $photoSelector.selectedPhotos,
+                                      maxSelectionCount: 1,
+                                      selectionBehavior: .ordered,
+                                      matching: .images)
                         Spacer()
                     }
                     HStack {
                         Spacer()
                         CaptureButton(camera: camera) { imageData in
-                            if let data = imageData,
-                               let image = UIImage(data: data)
-                            {
-                                photoSelector.image = image
+                            if let data = imageData {
+                                photoSelector.imageData = data
+                                photoSelector.convertDataToImage()
                             }
                         }
                         Spacer()
@@ -57,6 +58,18 @@ struct CameraView<T: Camera & Observable>: View {
                 .padding([.leading, .trailing])
                 .padding(.bottom, 30)
             }
+//            VStack {
+//                ZStack {
+//                    CornerRectangle(cornerLength: 30)
+//                        .stroke(.yellow, lineWidth: 3)
+//                        .frame(width: 250, height: 100)
+//
+//                    Image(systemName: "plus")
+//                        .font(.system(size: 40, weight: .medium))
+//                        .foregroundColor(.yellow)
+//                }
+//                .offset(y: -150)
+//            }
         }
     }
 }

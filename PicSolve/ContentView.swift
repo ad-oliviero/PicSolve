@@ -49,6 +49,7 @@ struct ContentView: View {
                     photoSelector.convertDataToImage()
                 }
             }
+            Tab("History", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90") {}
         }
     }
 }
