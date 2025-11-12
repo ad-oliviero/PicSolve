@@ -13,6 +13,7 @@ struct PicSolveApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .preferredColorScheme(.dark)
         }
     }
 }
@@ -21,4 +22,5 @@ let logger = Logger()
 
 #Preview {
     ContentView()
+        .preferredColorScheme(.dark)
 }
