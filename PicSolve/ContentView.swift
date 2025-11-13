@@ -17,10 +17,12 @@ struct ContentView: View {
     var body: some View {
         TabView {
             Tab("Camera", systemImage: "camera") {
-                CameraView(camera: camera, photoSelector: photoSelector)
-                    .task {
-                        await camera.start()
-                    }
+                NavigationStack {
+                    CameraView(camera: camera, photoSelector: photoSelector)
+                        .task {
+                            await camera.start()
+                        }
+                }
             }
             Tab("Manual", systemImage: "keyboard.fill") {
                 VStack {

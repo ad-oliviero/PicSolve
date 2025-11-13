@@ -20,7 +20,7 @@ class PhotoSelectorViewModel: ObservableObject {
     @Published var imageData: Data?
 
     @MainActor
-    func convertDataToImage() {
+    func convertDataToImage(completion: (() -> Void)? = nil) {
         if !selectedPhotos.isEmpty {
             Task {
                 if let data = try? await selectedPhotos[0].loadTransferable(type: Data.self) {
@@ -30,11 +30,13 @@ class PhotoSelectorViewModel: ObservableObject {
                         selectedPhotos.removeAll()
                     }
                 }
+                completion?()
             }
         } else if imageData != nil {
             if let currentimage = UIImage(data: imageData!) {
                 image = currentimage
             }
+            completion?()
         }
     }
 }

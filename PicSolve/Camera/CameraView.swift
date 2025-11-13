@@ -14,6 +14,7 @@ struct CameraView<T: Camera & Observable>: View {
     let camera: T
     @State var showPhotoPicker: Bool = false
     @StateObject var photoSelector: PhotoSelectorViewModel
+    @State private var isImageCaptured: Bool = false
 
     var body: some View {
         ZStack {
@@ -40,6 +41,11 @@ struct CameraView<T: Camera & Observable>: View {
                                       maxSelectionCount: 1,
                                       selectionBehavior: .ordered,
                                       matching: .images)
+                        .onChange(of: photoSelector.selectedPhotos) { _, _ in
+                            photoSelector.convertDataToImage {
+                                isImageCaptured = true
+                            }
+                        }
                         Spacer()
                     }
                     HStack {
@@ -47,7 +53,9 @@ struct CameraView<T: Camera & Observable>: View {
                         CaptureButton(camera: camera) { imageData in
                             if let data = imageData {
                                 photoSelector.imageData = data
-                                photoSelector.convertDataToImage()
+                                photoSelector.convertDataToImage {
+                                    isImageCaptured = true
+                                }
                             }
                         }
                         Spacer()
@@ -70,6 +78,9 @@ struct CameraView<T: Camera & Observable>: View {
 //                }
 //                .offset(y: -150)
 //            }
+        }
+        .navigationDestination(isPresented: $isImageCaptured) {
+            SolveView(photoSelector: photoSelector)
         }
     }
 }
