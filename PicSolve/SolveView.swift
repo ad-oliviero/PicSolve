@@ -10,22 +10,28 @@ import SwiftUI
 struct SolveView: View {
     @StateObject var photoSelector: PhotoSelectorViewModel
     @State private var showBoundingBoxes = true
+    private let pix2textProvider: Pix2TextProvider = .init()
+    @State private var textResult: String?
 
     var body: some View {
         VStack {
             if let image = photoSelector.image {
-                ZStack {
-                    Image(uiImage: image).resizable().scaledToFit()
-//                    FormulaOverlayPreview(image: image, results: photoSelector.formulaResults)
-                }
+                Image(uiImage: image).resizable().scaledToFit()
             }
-//            if showBoundingBoxes {
-//                FormulaOverlayPreview(image: , results: )
-//            }
+            if let result = textResult {
+                Text(result)
+            }
         }
         .navigationTitle("Solution")
+        .onAppear {
+            if let image = photoSelector.image {
+                let results = try! pix2textProvider.run(from: image)
+                print(results)
+            } else {
+                fatalError("Failed to load image")
+            }
+        }
     }
-//        .task { await photoSelector.processFormulas() }
 }
 
 #Preview {
