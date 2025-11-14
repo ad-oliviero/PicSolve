@@ -10,10 +10,11 @@ import SwiftUI
 internal import Combine
 
 class PhotoSelectorViewModel: ObservableObject {
-    #if targetEnvironment(simulator)
-        @Published var image: UIImage? = UIImage(named: "sampleEquation")
+    //    #if targetEnvironment(simulator)
+    #if DEBUG
+    @Published var image: UIImage? = UIImage(named: "sampleEquation")
     #else
-        @Published var image: UIImage?
+    @Published var image: UIImage?
     #endif
     @Published var selectedPhotos = [PhotosPickerItem]()
     @Published var croppedImages: [UIImage] = []
