@@ -36,8 +36,10 @@ class ONNXModelWrapper {
             throw ONNXModelError.modelNotFound
         }
         
-        // Create session options
+        // Create session options with optimizations
         let options = try ORTSessionOptions()
+        try options.setGraphOptimizationLevel(.all)
+        try options.setIntraOpNumThreads(2)
         
         // Create session
         guard let env = ortEnv else {
@@ -121,39 +123,27 @@ class ONNXModelWrapper {
         }
         
         let buffer = baseAddress.assumingMemoryBound(to: UInt8.self)
-        var floatArray = [Float]()
-        floatArray.reserveCapacity(width * height * 3)
+        let totalPixels = width * height
+        var floatArray = [Float](repeating: 0, count: totalPixels * 3)
         
         // ImageNet normalization values
         let mean: [Float] = [0.485, 0.456, 0.406]
         let std: [Float] = [0.229, 0.224, 0.225]
         
-        // Convert BGRA to RGB and normalize
+        // Single-pass conversion: BGRA to CHW format with normalization
         for y in 0..<height {
             for x in 0..<width {
                 let offset = y * bytesPerRow + x * 4
+                let pixelIndex = y * width + x
+                
                 let b = Float(buffer[offset]) / 255.0
                 let g = Float(buffer[offset + 1]) / 255.0
                 let r = Float(buffer[offset + 2]) / 255.0
                 
-                // Normalize and store in CHW format
-                floatArray.append((r - mean[0]) / std[0])
-            }
-        }
-        
-        for y in 0..<height {
-            for x in 0..<width {
-                let offset = y * bytesPerRow + x * 4
-                let g = Float(buffer[offset + 1]) / 255.0
-                floatArray.append((g - mean[1]) / std[1])
-            }
-        }
-        
-        for y in 0..<height {
-            for x in 0..<width {
-                let offset = y * bytesPerRow + x * 4
-                let b = Float(buffer[offset]) / 255.0
-                floatArray.append((b - mean[2]) / std[2])
+                // Store in CHW format (all R, then all G, then all B)
+                floatArray[pixelIndex] = (r - mean[0]) / std[0]
+                floatArray[totalPixels + pixelIndex] = (g - mean[1]) / std[1]
+                floatArray[totalPixels * 2 + pixelIndex] = (b - mean[2]) / std[2]
             }
         }
         

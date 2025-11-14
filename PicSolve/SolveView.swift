@@ -11,7 +11,7 @@ import SwiftUI
 struct SolveView: View {
     @StateObject var photoSelector: PhotoSelectorViewModel
     @State private var showBoundingBoxes = true
-    private let pix2textProvider: Pix2TextProvider = .init()
+    @State private var pix2textProvider: Pix2TextProvider?
     @State private var textResult: String?
 
     var body: some View {
@@ -31,8 +31,12 @@ struct SolveView: View {
         .navigationTitle("Solution")
         .onAppear {
             if let image = photoSelector.image {
+                if pix2textProvider == nil {
+                    pix2textProvider = Pix2TextProvider()
+                }
+
                 do {
-                    let results = try pix2textProvider.run(from: image)
+                    let results = try pix2textProvider!.run(from: image)
 
                     if results.isEmpty {
                         textResult = "No formulas detected in the image."

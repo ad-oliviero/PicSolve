@@ -12,10 +12,14 @@ class MathFormulaRecognizer {
     private var croppedImage: UIImage?
     private let encoderModel = ONNXModelWrapper(modelName: "encoder_model")
     private let decoderModel = ONNXModelWrapper(modelName: "decoder_model")
+    private var areModelsLoaded = false
 
-    init() {
-        try! encoderModel.loadModel()
-        try! decoderModel.loadModel()
+    private func ensureModelsLoaded() throws {
+        if !areModelsLoaded {
+            try encoderModel.loadModel()
+            try decoderModel.loadModel()
+            areModelsLoaded = true
+        }
     }
 
     private func prepareMFREncoderInput() throws -> [String: ORTValue] {
@@ -179,6 +183,7 @@ class MathFormulaRecognizer {
     }
 
     func recognize(from: UIImage) throws -> String {
+        try ensureModelsLoaded()
         croppedImage = from
         let encoderInputs = try prepareMFREncoderInput()
         let encoderOutputs = try encoderModel.runInference(inputs: encoderInputs)

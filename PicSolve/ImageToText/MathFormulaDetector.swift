@@ -20,9 +20,13 @@ struct BoundingBox {
 class MathFormulaDetector {
     private var image: UIImage?
     private let model = ONNXModelWrapper(modelName: "pix2text-mfd-1.5")
+    private var isModelLoaded = false
 
-    init() {
-        try! model.loadModel()
+    private func ensureModelLoaded() throws {
+        if !isModelLoaded {
+            try model.loadModel()
+            isModelLoaded = true
+        }
     }
 
     private func prepareInput() throws -> [String: ORTValue] {
@@ -131,6 +135,7 @@ class MathFormulaDetector {
     }
 
     func processImage(from: UIImage) throws -> [BoundingBox] {
+        try ensureModelLoaded()
         image = from
         let inputs = try prepareInput()
         let outputs = try model.runInference(inputs: inputs)
