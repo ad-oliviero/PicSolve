@@ -16,41 +16,72 @@ class Pix2TextProvider {
         self.image = from
 
         let boxes = try mfDetector.processImage(from: self.image!)
-        let croppedImages = try cropFormulaRegions(boxes: boxes)
+
+        guard !boxes.isEmpty else {
+            print("No math formulas detected in image")
+            return []
+        }
+
+        let boxesAndImages = try cropFormulaRegions(boxes: boxes)
+
+        guard !boxesAndImages.isEmpty else {
+            print("No valid regions to process after cropping")
+            return []
+        }
 
         var results: [(BoundingBox, String)] = []
 
-        for (box, croppedImage) in zip(boxes, croppedImages) {
-            print("Box: \(box)")
-            print("Cropped image size: \(croppedImage.size)")
-            let text = try mfRecognizer.recognize(from: croppedImage)
-            results.append((box, text))
+        for (box, croppedImage) in boxesAndImages {
+            autoreleasepool {
+                do {
+                    let text = try mfRecognizer.recognize(from: croppedImage)
+                    print("  Result: \(text)")
+                    results.append((box, text))
+                } catch {
+                    print("  Error recognizing formula: \(error)")
+                }
+            }
         }
 
         return results
     }
 
-    private func cropFormulaRegions(boxes: [BoundingBox]) throws -> [UIImage] {
-        var croppedImages: [UIImage] = []
+    private func cropFormulaRegions(boxes: [BoundingBox]) throws -> [(BoundingBox, UIImage)] {
+        var results: [(BoundingBox, UIImage)] = []
 
         guard let cgImage = image!.cgImage else { return [] }
 
         let imageWidth = CGFloat(cgImage.width)
         let imageHeight = CGFloat(cgImage.height)
 
-        for box in boxes {
-            let x = CGFloat(box.x) * imageWidth
-            let y = CGFloat(box.y) * imageHeight
-            let width = CGFloat(box.width) * imageWidth
-            let height = CGFloat(box.height) * imageHeight
+        print("Image dimensions: \(imageWidth) x \(imageHeight)")
 
-            let rect = CGRect(x: x, y: y, width: width, height: height)
+        for box in boxes {
+            let x = CGFloat(box.x) / 768.0 * imageWidth
+            let y = CGFloat(box.y) / 768.0 * imageHeight
+            let width = CGFloat(box.width) / 768.0 * imageWidth
+            let height = CGFloat(box.height) / 768.0 * imageHeight
+
+            // box coordinates: raw \(box.x),\(box.y) -> scaled \(x),\(y)
+
+            // Validate and clamp bounding box coordinates
+            let clampedX = max(0, min(x, imageWidth))
+            let clampedY = max(0, min(y, imageHeight))
+            let clampedWidth = min(width, imageWidth - clampedX)
+            let clampedHeight = min(height, imageHeight - clampedY)
+
+            // skip non valid boxes
+            if clampedWidth <= 0 || clampedHeight <= 0 {
+                continue
+            }
+
+            let rect = CGRect(x: clampedX, y: clampedY, width: clampedWidth, height: clampedHeight)
 
             if let croppedCGImage = cgImage.cropping(to: rect) {
-                croppedImages.append(UIImage(cgImage: croppedCGImage))
+                results.append((box, UIImage(cgImage: croppedCGImage)))
             }
         }
 
-        return croppedImages
+        return results
     }
 }

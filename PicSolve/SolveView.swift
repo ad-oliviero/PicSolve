@@ -5,6 +5,7 @@
 //  Created by Adriano Oliviero on 13/11/25.
 //
 
+import LaTeXSwiftUI
 import SwiftUI
 
 struct SolveView: View {
@@ -18,17 +19,32 @@ struct SolveView: View {
             if let image = photoSelector.image {
                 Image(uiImage: image).resizable().scaledToFit()
             }
+
             if let result = textResult {
-                Text(result)
+                ScrollView {
+                    LaTeX("$$" + result + "$$")
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
         }
         .navigationTitle("Solution")
         .onAppear {
             if let image = photoSelector.image {
-                let results = try! pix2textProvider.run(from: image)
-                print(results)
+                do {
+                    let results = try pix2textProvider.run(from: image)
+
+                    if results.isEmpty {
+                        textResult = "No formulas detected in the image."
+                    } else {
+                        textResult = results[0].1
+                    }
+                } catch {
+                    textResult = "No formulas detected in the image."
+                    fatalError("Failed to extract text from the image")
+                }
             } else {
-                fatalError("Failed to load image")
+                fatalError("No image to process")
             }
         }
     }

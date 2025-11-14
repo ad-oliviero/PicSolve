@@ -144,16 +144,13 @@ class MathFormulaRecognizer {
     }
 
     func loadTokenizer() throws -> [Int: String] {
-        guard let path = Bundle.main.path(forResource: "tokenizer", ofType: "json", inDirectory: "Pix2TextModels/pix2text-mfr-1.5") else {
-            throw NSError(domain: "Tokenizer", code: 0, userInfo: nil)
-        }
+        let path = Bundle.main.path(forResource: "tokenizer", ofType: "json")!
 
         let data = try Data(contentsOf: URL(fileURLWithPath: path))
         let json = try JSONSerialization.jsonObject(with: data) as! [String: Any]
         let model = json["model"] as! [String: Any]
         let vocab = model["vocab"] as! [String: Int]
 
-        // Reverse the vocab: id -> token
         var idToToken: [Int: String] = [:]
         for (token, id) in vocab {
             idToToken[id] = token
@@ -167,13 +164,16 @@ class MathFormulaRecognizer {
 
         var latex = ""
         for token in tokens {
-            // Skip special tokens
             if token == 0 || token == 1 || token == 2 { continue }
 
             if let tokenStr = tokenizer[token] {
                 latex += tokenStr
             }
         }
+
+        // The Ġ character (U+0120) represents spaces in GPT-style tokenizers
+        latex = latex.replacingOccurrences(of: "Ġ", with: " ")
+        latex = latex.trimmingCharacters(in: .whitespaces)
 
         return latex
     }
