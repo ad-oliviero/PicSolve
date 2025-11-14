@@ -5,9 +5,9 @@
 //  Created by Adriano Oliviero on 07/11/25.
 //
 
+import Combine
 import PhotosUI
 import SwiftUI
-internal import Combine
 
 struct ContentView: View {
     @StateObject var photoSelector: PhotoSelectorViewModel = .init()

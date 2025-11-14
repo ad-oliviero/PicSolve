@@ -5,7 +5,7 @@
  An object that provides the interface to the features of the camera.
  */
 
-internal import Combine
+import Combine
 import os
 import SwiftUI
 

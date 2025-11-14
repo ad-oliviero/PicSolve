@@ -9,17 +9,27 @@ import SwiftUI
 
 struct SolveView: View {
     @StateObject var photoSelector: PhotoSelectorViewModel
+    @State private var showBoundingBoxes = true
 
     var body: some View {
-        if let image = photoSelector.image {
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFit()
-                .navigationTitle("Solution")
+        VStack {
+            if let image = photoSelector.image {
+                ZStack {
+                    Image(uiImage: image).resizable().scaledToFit()
+//                    FormulaOverlayPreview(image: image, results: photoSelector.formulaResults)
+                }
+            }
+//            if showBoundingBoxes {
+//                FormulaOverlayPreview(image: , results: )
+//            }
         }
+        .navigationTitle("Solution")
     }
+//        .task { await photoSelector.processFormulas() }
 }
 
 #Preview {
-    SolveView(photoSelector: PhotoSelectorViewModel())
+    NavigationStack {
+        SolveView(photoSelector: PhotoSelectorViewModel())
+    }.preferredColorScheme(.dark)
 }

@@ -5,9 +5,9 @@
 //  Created by Adriano Oliviero on 12/11/25.
 //
 
+import Combine
 import PhotosUI
 import SwiftUI
-internal import Combine
 
 class PhotoSelectorViewModel: ObservableObject {
     //    #if targetEnvironment(simulator)

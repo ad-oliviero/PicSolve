@@ -6,7 +6,7 @@
  */
 
 import AVFoundation
-internal import Combine
+import Combine
 import Foundation
 import os
 
