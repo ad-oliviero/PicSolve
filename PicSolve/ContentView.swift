@@ -12,7 +12,6 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var photoSelector: PhotoSelectorViewModel = .init()
     @State private var camera = CameraModel()
-    @Environment(\.scenePhase) var scenePhase
 
     var body: some View {
         NavigationStack {

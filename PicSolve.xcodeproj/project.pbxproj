@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		20738A3A2EBE148E00735EDC /* LaTeXSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 20738A392EBE148E00735EDC /* LaTeXSwiftUI */; };
+		20D9262E2EC78476007A5AFB /* onnxruntime in Frameworks */ = {isa = PBXBuildFile; productRef = 20D9262D2EC78476007A5AFB /* onnxruntime */; };
+		20D926302EC78476007A5AFB /* onnxruntime_extensions in Frameworks */ = {isa = PBXBuildFile; productRef = 20D9262F2EC78476007A5AFB /* onnxruntime_extensions */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +29,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				20D9262E2EC78476007A5AFB /* onnxruntime in Frameworks */,
 				20738A3A2EBE148E00735EDC /* LaTeXSwiftUI in Frameworks */,
+				20D926302EC78476007A5AFB /* onnxruntime_extensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +75,8 @@
 			name = PicSolve;
 			packageProductDependencies = (
 				20738A392EBE148E00735EDC /* LaTeXSwiftUI */,
+				20D9262D2EC78476007A5AFB /* onnxruntime */,
+				20D9262F2EC78476007A5AFB /* onnxruntime_extensions */,
 			);
 			productName = PicSolve;
 			productReference = 20738A2A2EBE130400735EDC /* PicSolve.app */;
@@ -102,6 +108,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				20738A382EBE148E00735EDC /* XCRemoteSwiftPackageReference "LaTeXSwiftUI" */,
+				20D9262C2EC78476007A5AFB /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 20738A2B2EBE130400735EDC /* Products */;
@@ -264,6 +271,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L923V73973;
 				ENABLE_PREVIEWS = YES;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					"*.gitattributes",
+					README.md,
+					.git,
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSCameraUsageDescription = "PicSolve needs access to your camera to capture and solve math problems.";
@@ -299,6 +311,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L923V73973;
 				ENABLE_PREVIEWS = YES;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					"*.gitattributes",
+					README.md,
+					.git,
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSCameraUsageDescription = "PicSolve needs access to your camera to capture and solve math problems.";
@@ -357,6 +374,14 @@
 				version = 1.5.0;
 			};
 		};
+		20D9262C2EC78476007A5AFB /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/microsoft/onnxruntime-swift-package-manager";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.20.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -364,6 +389,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 20738A382EBE148E00735EDC /* XCRemoteSwiftPackageReference "LaTeXSwiftUI" */;
 			productName = LaTeXSwiftUI;
+		};
+		20D9262D2EC78476007A5AFB /* onnxruntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 20D9262C2EC78476007A5AFB /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */;
+			productName = onnxruntime;
+		};
+		20D9262F2EC78476007A5AFB /* onnxruntime_extensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 20D9262C2EC78476007A5AFB /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */;
+			productName = onnxruntime_extensions;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
