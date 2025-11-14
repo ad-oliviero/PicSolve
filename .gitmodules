@@ -1,0 +1,6 @@
+[submodule "PicSolve/Pix2TextModels/pix2text-mfr-1.5"]
+	path = PicSolve/Pix2TextModels/pix2text-mfr-1.5
+	url = https://huggingface.co/breezedeus/pix2text-mfr-1.5
+[submodule "PicSolve/Pix2TextModels/pix2text-mfd-1.5"]
+	path = PicSolve/Pix2TextModels/pix2text-mfd-1.5
+	url = https://huggingface.co/breezedeus/pix2text-mfd-1.5
