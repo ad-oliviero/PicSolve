@@ -40,15 +40,12 @@ class ONNXModelWrapper {
         let options = try ORTSessionOptions()
         try options.setGraphOptimizationLevel(.all)
         try options.setIntraOpNumThreads(2)
-        
+
         // Create session
         guard let env = ortEnv else {
             throw ONNXModelError.sessionCreationFailed
         }
-        
         ortSession = try ORTSession(env: env, modelPath: modelPath, sessionOptions: options)
-        
-        print("ONNX Model '\(modelName)' loaded successfully from: \(modelPath)")
     }
     
     func getInputNames() throws -> [String] {
@@ -57,7 +54,6 @@ class ONNXModelWrapper {
         }
         
         let inputNames = try session.inputNames()
-        print("Model inputs: \(inputNames)")
         return inputNames
     }
     
@@ -67,7 +63,6 @@ class ONNXModelWrapper {
         }
         
         let outputNames = try session.outputNames()
-        print("Model outputs: \(outputNames)")
         return outputNames
     }
     

@@ -9,8 +9,8 @@ import SwiftUI
 
 class Pix2TextProvider {
     var image: UIImage?
-    private var mfDetector = MathFormulaDetector()
-    private var mfRecognizer = MathFormulaRecognizer()
+    private lazy var mfDetector = MathFormulaDetector()
+    private lazy var mfRecognizer = MathFormulaRecognizer()
 
     func run(from: UIImage) throws -> [(BoundingBox, String)] {
         self.image = from
@@ -35,10 +35,9 @@ class Pix2TextProvider {
             autoreleasepool {
                 do {
                     let text = try mfRecognizer.recognize(from: croppedImage)
-                    print("  Result: \(text)")
                     results.append((box, text))
                 } catch {
-                    print("  Error recognizing formula: \(error)")
+                    print("Error recognizing formula: \(error)")
                 }
             }
         }
@@ -53,8 +52,6 @@ class Pix2TextProvider {
 
         let imageWidth = CGFloat(cgImage.width)
         let imageHeight = CGFloat(cgImage.height)
-
-        print("Image dimensions: \(imageWidth) x \(imageHeight)")
 
         for box in boxes {
             let x = CGFloat(box.x) / 768.0 * imageWidth

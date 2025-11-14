@@ -77,8 +77,6 @@ class MathFormulaDetector {
         // Sort by confidence descending
         boxes.sort { $0.confidence > $1.confidence }
 
-        print("Found \(boxes.count) high-confidence detections")
-
         // Apply NMS
         boxes = nonMaximumSuppression(boxes: boxes, iouThreshold: 0.3)
 
