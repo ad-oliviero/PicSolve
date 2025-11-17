@@ -15,7 +15,12 @@ struct SolveView: View {
     var body: some View {
         VStack {
             if let image = photoSelector.image {
-                Image(uiImage: image).resizable().scaledToFit()
+                Image(uiImage: image)
+                    .resizable()
+                    .clipShape(RoundedRectangle(cornerRadius: 40, style: .continuous))
+                    .scaledToFit()
+                    .padding(40)
+                    .frame(maxWidth: 400)
             }
 
             if let result = textResult {

@@ -12,7 +12,7 @@ import SwiftUI
 class PhotoSelectorViewModel: ObservableObject {
     //    #if targetEnvironment(simulator)
     #if DEBUG
-    @Published var image: UIImage? = UIImage(named: "sampleEquation")
+    @Published var image: UIImage? = UIImage(named: "sampleMath")
     #else
     @Published var image: UIImage?
     #endif

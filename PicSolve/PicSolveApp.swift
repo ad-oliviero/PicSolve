@@ -19,8 +19,3 @@ struct PicSolveApp: App {
 }
 
 let logger = Logger()
-
-#Preview {
-    ContentView()
-        .preferredColorScheme(.dark)
-}
