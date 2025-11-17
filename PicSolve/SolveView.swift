@@ -24,9 +24,11 @@ struct SolveView: View {
             }
 
             if let result = textResult {
-                LaTeX("$$" + result + "$$")
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                ScrollView {
+                    LaTeX("$$" + result + "$$")
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
             } else {
                 ProgressView()
             }
